@@ -141,10 +141,10 @@ def verifySig(theHash, sig, veriKey):
 	# signature using the verify() function of the
 	# key and return the result
 	
-	if (veriKey.verify, sig) == True:
-		print "Match!"
+	if veriKey.verify(theHash, sig) == True:
+                return True
 	else:
-		print "No match!"
+		return False
 
 
 # The main function
@@ -187,6 +187,11 @@ def main():
 		# signature of the input file
 		fileSignedSig = loadSig(sigFileName)
 		verified = verifyFileSig(inputFileName, key, fileSignedSig)
+
+		if (verified):
+			print "Match"
+		else:
+			print "No match"
 	else:
 		print "Invalid mode ", mode	
 
