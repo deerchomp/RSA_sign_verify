@@ -80,7 +80,7 @@ def verifyFileSig(fileName, pubKey, signature):
 		keyFileContent = keyFile.read()
 
 	# 2. Compute the SHA-512 hash of the contents
-	dataHash = SHA512.new(keyFileContent.hexdigest())
+	dataHash = SHA512.new(keyFileContent).hexdigest()
 
 	# 3. Use the verifySig function you implemented in
 	# order to verify the file signature
@@ -141,7 +141,7 @@ def verifySig(theHash, sig, veriKey):
 	# signature using the verify() function of the
 	# key and return the result
 	
-	if (veriKey.verify*theHash, sig) == True:
+	if (veriKey.verify, sig) == True:
 		print "Match!"
 	else:
 		print "No match!"
