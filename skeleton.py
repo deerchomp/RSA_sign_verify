@@ -99,9 +99,13 @@ def saveSig(fileName, signature):
 
 	# TODO: 
 	# Signature is a tuple with a single value.
+	firstValue = str(signature[0])
 	# Get the first value of the tuple, convert it
 	# to a string, and save it to the file (i.e., indicated
 	# by fileName)
+	f = open(fileName, "w")
+	f.write(firstValue)
+	f.close()
 
 ###########################################
 # Loads the signature and converts it into
@@ -172,6 +176,7 @@ def main():
 		# TODO: 1. Get the file signature
 		#       2. Save the signature to the file
 		fileSig = getFileSig(inputFileName, key)
+		saveSig(sigFileName, fileSig)
 		print "Signature saved to file ", sigFileName
 
 	# We are verifying the signature
