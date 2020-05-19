@@ -39,7 +39,7 @@ def loadKey(keyPath):
 ##################################################
 def digSig(sigKey, string):
 	
-	dataHash = SHA512.new(string).hexdigest()
+	dataHash = SHA512.new(string).digest()
 	return sigKey.sign(dataHash, '')
 
 ##########################################################
@@ -57,7 +57,7 @@ def getFileSig(fileName, privKey):
 		keyFileContent = keyFile.read()
 
 	# 3. Compute the SHA-512 hash of the contents
-		datahash = SHA512.new(keyFileContent).hexdigest()
+		datahash = SHA512.new(keyFileContent.encode('utf-8')).digest()
 
 	# 4. Sign the hash computed in 4. using the digSig() function
 	# you implemented.
@@ -80,7 +80,7 @@ def verifyFileSig(fileName, pubKey, signature):
 		keyFileContent = keyFile.read()
 
 	# 2. Compute the SHA-512 hash of the contents
-	dataHash = SHA512.new(keyFileContent).hexdigest()
+	dataHash = SHA512.new(keyFileContent.encode('utf-8')).digest()
 
 	# 3. Use the verifySig function you implemented in
 	# order to verify the file signature
@@ -120,13 +120,20 @@ def loadSig(fileName):
 	# Open the file, read the signature string, convert it
 	# into an integer, and then put the integer into a single
 	# element tuple
-	
+	'''
 	sig = ()
 	with open(fileName, 'r') as file:
 		contents = int(file.read())
 		sig = contents
 	return sig
-	
+	'''
+	sig = ()
+	with open(fileName, 'r') as file:
+		contents = file.read()
+		result = int(contents)
+		sig = (result,)
+		return sig
+
 #################################################
 # Verifies the signature
 # @param theHash - the hash 
@@ -141,18 +148,14 @@ def verifySig(theHash, sig, veriKey):
 	# signature using the verify() function of the
 	# key and return the result
 	
-	if veriKey.verify(theHash, sig) == True:
-                return True
-	else:
-		return False
-
+	return veriKey.verify(theHash, sig)
 
 # The main function
 def main():
 	
 	# Make sure that all the arguments have been provided
 	if len(sys.argv) < 5:
-		print "USAGE: " + sys.argv[0] + " <KEY FILE NAME> <SIGNATURE FILE NAME> <INPUT FILE NAME>"
+		print("USAGE: " + sys.argv[0] + " <KEY FILE NAME> <SIGNATURE FILE NAME> <INPUT FILE NAME>")
 		exit(-1)
 	
 	# The key file
@@ -177,7 +180,7 @@ def main():
 		#       2. Save the signature to the file
 		fileSig = getFileSig(inputFileName, key)
 		saveSig(sigFileName, fileSig)
-		print "Signature saved to file ", sigFileName
+		print("Signature saved to file ", sigFileName)
 
 	# We are verifying the signature
 	elif mode == "verify":
@@ -189,11 +192,11 @@ def main():
 		verified = verifyFileSig(inputFileName, key, fileSignedSig)
 
 		if (verified):
-			print "Match"
+			print("Match")
 		else:
-			print "No match"
+			print("No match")
 	else:
-		print "Invalid mode ", mode	
+		print("Invalid mode ", mode	)
 
 ### Call the main function ####
 if __name__ == "__main__":
